@@ -4,6 +4,7 @@
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const { resolve } = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
 	entry: [
@@ -37,18 +38,25 @@ module.exports = {
 			, {
 				enforce: 'pre',
 				test: /\.js$/,
-				use: "source-map-loader"
+				use: "source-map-loader",
+				exclude: /node_modules/,
+			}
+			, {
+				test: /\.css$/,
+				loader: ExtractTextPlugin.extract('css-loader?sourceMap'),
+				exclude: /node_modules/,
 			}
 		]
 	}
 	, resolve: {
-		extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx']
+		extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx', '.css']
 	}
 	, devtool: 'inline-source-map'
 
 	, plugins: [
 		new CheckerPlugin()
-		,new webpack.HotModuleReplacementPlugin() // enable HMR globally
-    	,new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates
+		, new webpack.HotModuleReplacementPlugin() // enable HMR globally
+    	, new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates
+		, new ExtractTextPlugin({ filename: 'bundle.css', disable: false, allChunks: true })
 	]
 };

@@ -1,3 +1,4 @@
+import './styles/main';
 import { Hello } from "./components/Hello";
 
 var element = document.createElement("div");
