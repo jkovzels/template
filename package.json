@@ -1,0 +1,24 @@
+{
+  "name": "invision-tools",
+  "version": "1.0.0",
+  "description": "For the cases when you need you invision stuff elsewhre",
+  "main": "index.js",
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.0.0-beta.18",
+    "source-map-loader": "^0.1.6",
+    "typescript": "^2.1.5",
+    "webpack": "^2.2.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server"
+  },
+  "author": "Jurijs Kovzels",
+  "license": "UNLICENSED",
+  "dependencies": {},
+  "repository": {
+	  "type": "git",
+	  "url": "https://tripcenter.visualstudio.com/DefaultCollection/_git/InvisionTools"
+  }
+}
