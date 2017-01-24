@@ -55,7 +55,7 @@ module.exports = {
 		]
 	}
 	, resolve: {
-		extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx', '.scss']
+		extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx', '.scss', '.css']
 	}
 	, devtool: 'inline-source-map'
 
