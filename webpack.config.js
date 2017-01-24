@@ -7,10 +7,6 @@ const { resolve } = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const sassLoaders = [
-	'css-loader?sourceMap',
-	'sass-loader?includePaths[]=' + resolve(__dirname, './src/styles')
-];
 
 module.exports = {
 	entry: [
@@ -48,7 +44,13 @@ module.exports = {
 			}
 			, {
 				test: /\.scss$/,
-				loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: sassLoaders })
+				loader: ExtractTextPlugin.extract({
+					fallbackLoader: 'style-loader'
+					, loader: [
+						'css-loader?sourceMap',
+						'sass-loader?includePaths[]=' + resolve(__dirname, './src/styles'),
+						]
+				})
 			}
 		]
 	}
