@@ -1,68 +1,94 @@
-// `CheckerPlugin` is optional. Use it if you want async error reporting.
-// We need this plugin to detect a `--watch` mode. It may be removed later
-// after https://github.com/webpack/webpack/issues/3460 will be resolved.
-const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const { resolve } = require('path');
-const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+const outputPath = resolve(__dirname, 'dist');
+
+const webpack = require('webpack');
+
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-	entry: [
-		'webpack-dev-server/client?http://localhost:8080',
-		'webpack/hot/only-dev-server',
-		'./src/index',
-	]
-	, output: {
-		filename: 'bundle.js'
-		, path: resolve(__dirname, './public/')
-		, publicPath: '/public/'
-	}
-	, devServer: {
-		devServer: {
-			publicPath: '/public/',
-			colors: true,
-			hot: true,
-			inline: true,
-			progress: true,
-			historyApiFallback: true,
-		},
-	}
-	, module: {
-		rules: [
-			{
-				test: /\.tsx?$/,
-				use: 'awesome-typescript-loader',
-				exclude: /node_modules/,
-			}
-			, {
-				enforce: 'pre',
-				test: /\.js$/,
-				use: "source-map-loader",
-				exclude: /node_modules/,
-			}
-			, {
-				test: /\.scss$/,
-				loader: ExtractTextPlugin.extract({
-					fallbackLoader: 'style-loader'
-					, loader: [
-						'css-loader?sourceMap',
-						'sass-loader?includePaths[]=' + resolve(__dirname, './src/styles'),
-						]
-				})
-			}
-		]
-	}
-	, resolve: {
-		extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx', '.scss', '.css']
-	}
-	, devtool: 'inline-source-map'
+  context: resolve(__dirname, "src"),
+  entry: './index.ts',
 
-	, plugins: [
-		new CheckerPlugin()
-		, new webpack.HotModuleReplacementPlugin() // enable HMR globally
-		, new webpack.NamedModulesPlugin() // prints more readable module names in the browser console on HMR updates
-		, new ExtractTextPlugin({ filename: 'bundle.css', disable: false, allChunks: true })
-	]
+  resolve: {
+    extensions: ['.webpack.js', '.html', '.ts', '.tsx', '.js', '.jsx', '.scss', '.css', '.jpg', '.png']
+  },
+
+  module: {
+    rules: [
+
+      {
+        enforce: 'pre',
+        test: /\.js$/,
+        use: "source-map-loader",
+        exclude: /node_modules/,
+      }
+      , {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+      , {
+        test: /\.scss$/,
+        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
+          fallback: 'style-loader'
+          , use: [
+            'css-loader?sourceMap',
+            'sass-loader?includePaths[]=' + resolve(__dirname, 'styles'),
+          ]
+        }))
+      }
+      , {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader'
+          , query: {
+            name: '[path][name].[ext]?[hash]'
+          }
+        }
+      }
+      , {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
+          query: {
+            name: '[path][name].[ext]?[hash]'
+          }
+        }
+      }
+    ]
+  },
+
+
+
+  plugins: [
+    new ExtractTextPlugin({ filename: 'bundle.css', disable: false, allChunks: true })
+    , new HtmlWebpackPlugin({
+      template: 'index.html',
+    })
+    , new CleanWebpackPlugin([
+      outputPath
+    ])
+    , new webpack.HotModuleReplacementPlugin()
+    , new webpack.NamedModulesPlugin()
+  ]
+
+  , output: {
+    filename: 'bundle.js'
+    , path: outputPath
+    , publicPath: ""
+  },
+
+  stats: {
+    errorDetails: true
+  },
+
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: outputPath
+    , hot: true
+  }
 };
