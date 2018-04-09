@@ -1,14 +1,14 @@
 {
-	"compilerOptions": {
-		"outDir": "./dist/",
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"module": "commonjs",
-		"target": "es5",
-		"allowJs": false
-	},
-	"include": [
-		"./src/**/*"
-	],
-	"compileOnSave": false
+  "compilerOptions": {
+    "outDir": "./dist/", //change to ./docs/ if you plan to use Github Pages (https://pages.github.com/)
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
+    "allowJs": false,
+    "sourceMap": true
+  },
+  "include": [
+    "./src/**/*"
+  ]
+  , "compileOnSave": false
 }

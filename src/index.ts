@@ -11,5 +11,4 @@ class Startup {
         console.log("Tempalte is on. Up and Running.");
     }
 }
-
 Startup.main();
